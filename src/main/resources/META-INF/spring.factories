@@ -1,0 +1,2 @@
+# spring boot starter
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.cxmapi.api.v20231124.YuanApiConfig
