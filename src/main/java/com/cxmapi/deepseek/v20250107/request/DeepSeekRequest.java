@@ -13,6 +13,6 @@ public class DeepSeekRequest extends AbstractModel {
 
     @Override
     public String getPath() {
-        return "/api/v1/deepSeek";
+        return "/api/v1/deepSeekV3";
     }
 }
