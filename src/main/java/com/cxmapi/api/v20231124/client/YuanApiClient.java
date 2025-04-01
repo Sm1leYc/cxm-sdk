@@ -3,6 +3,7 @@ package com.cxmapi.api.v20231124.client;
 import com.cxmapi.common.AbstractModel;
 import com.cxmapi.common.AbstractClient;
 import com.cxmapi.common.exception.YuanapiSdkException;
+import com.cxmapi.common.model.ApiResponse;
 import com.cxmapi.common.model.Config;
 
 
@@ -22,7 +23,7 @@ public class YuanApiClient extends AbstractClient {
 
     }
 
-    public String invokeApi(AbstractModel request) throws YuanapiSdkException{
+    public ApiResponse invokeApi(AbstractModel request) throws YuanapiSdkException{
         try {
             return internalRequest(request);
         } catch (Exception e) {

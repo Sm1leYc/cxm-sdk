@@ -3,6 +3,7 @@ package com.cxmapi.ian.v20250107.client;
 import com.cxmapi.common.AbstractClient;
 import com.cxmapi.common.AbstractModel;
 import com.cxmapi.common.exception.YuanapiSdkException;
+import com.cxmapi.common.model.ApiResponse;
 import com.cxmapi.common.model.Config;
 
 public class IanClient extends AbstractClient {
@@ -11,7 +12,7 @@ public class IanClient extends AbstractClient {
         super(credential);
     }
 
-    public String getIan(AbstractModel request) throws YuanapiSdkException {
+    public ApiResponse getIan(AbstractModel request) throws YuanapiSdkException {
         try {
             return internalRequest(request);
         } catch (Exception e) {

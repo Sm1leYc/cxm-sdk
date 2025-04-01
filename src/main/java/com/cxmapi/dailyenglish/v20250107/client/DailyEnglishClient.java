@@ -3,6 +3,7 @@ package com.cxmapi.dailyenglish.v20250107.client;
 import com.cxmapi.common.AbstractClient;
 import com.cxmapi.common.AbstractModel;
 import com.cxmapi.common.exception.YuanapiSdkException;
+import com.cxmapi.common.model.ApiResponse;
 import com.cxmapi.common.model.Config;
 
 public class DailyEnglishClient extends AbstractClient {
@@ -11,7 +12,7 @@ public class DailyEnglishClient extends AbstractClient {
         super(credential);
     }
 
-    public String getDailyEnglish(AbstractModel request) throws YuanapiSdkException {
+    public ApiResponse getDailyEnglish(AbstractModel request) throws YuanapiSdkException {
 
         try {
             return internalRequest(request);

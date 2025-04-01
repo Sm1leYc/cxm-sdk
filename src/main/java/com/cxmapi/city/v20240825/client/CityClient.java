@@ -3,6 +3,7 @@ package com.cxmapi.city.v20240825.client;
 import com.cxmapi.common.AbstractClient;
 import com.cxmapi.common.AbstractModel;
 import com.cxmapi.common.exception.YuanapiSdkException;
+import com.cxmapi.common.model.ApiResponse;
 import com.cxmapi.common.model.Config;
 
 public class CityClient extends AbstractClient {
@@ -11,7 +12,7 @@ public class CityClient extends AbstractClient {
         super(credential);
     }
 
-    public String getCityInfo(AbstractModel request) throws YuanapiSdkException{
+    public ApiResponse getCityInfo(AbstractModel request) throws YuanapiSdkException{
         try {
             return internalRequest(request);
         } catch (Exception e) {

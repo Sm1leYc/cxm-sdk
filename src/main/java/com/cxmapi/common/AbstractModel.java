@@ -12,8 +12,6 @@ public abstract class AbstractModel {
 
     private Map<String, Object> param = new HashMap<>();
 
-    private String traceId;
-
     public abstract String getMethod();
 
     public abstract String getPath();
@@ -27,11 +25,4 @@ public abstract class AbstractModel {
         this.param = params;
     }
 
-    public String getTraceId() {
-        return traceId;
-    }
-
-    public void setTraceId(String traceId) {
-        this.traceId = traceId;
-    }
 }
