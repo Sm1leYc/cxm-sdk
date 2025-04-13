@@ -81,6 +81,9 @@ public abstract class AbstractClient {
         Map<String, Object> requestParams = request.getRequestParams();
         String signParam = HttpUtils.getParam(method, requestParams);
 
+        // 生成traceId 传递到网关层
+        String traceId = UUID.randomUUID().toString();
+
         if (autoRetry) {
             // 获取用户配置的重试策略
             RetryStrategy retryStrategy = RetryStrategyLoader.getStrategy(this.config.getRetryStrategyName());
@@ -95,7 +98,7 @@ public abstract class AbstractClient {
             String finalParam = signParam;
             Callable<ApiResponse> httpRequestTask = () -> {
                 // 执行请求并获取响应
-                ApiResponse response = executeRequest(request, path, method, finalParam);
+                ApiResponse response = executeRequest(request, path, method, finalParam, traceId);
 
                 // 保存最新响应
                 lastResponseRef.set(response);
@@ -129,17 +132,16 @@ public abstract class AbstractClient {
             }
         } else {
             // 不启用重试，直接执行一次请求
-           return executeRequest(request, path, method, signParam);
+           return executeRequest(request, path, method, signParam, traceId);
         }
     }
 
     // 执行request请求
-    private ApiResponse executeRequest(AbstractModel request, String path, String method, String param)
+    private ApiResponse executeRequest(AbstractModel request, String path, String method, String param, String traceId)
             throws YuanapiSdkException {
-
         // 获取请求头
         Map<String, String> reqHeaders = HttpUtils.getHeader(
-                param, config.getAccessKey(), config.getSecretKey());
+                traceId, param, config.getAccessKey(), config.getSecretKey());
 
         if (HttpRequestParams.GET.equals(request.getMethod())){
             Map<String, Object> requestParams = request.getRequestParams();
@@ -152,9 +154,20 @@ public abstract class AbstractClient {
                 .addHeaders(reqHeaders);
 
         // 执行请求
-        HttpResponse httpResponse = httpRequest.execute();
+        HttpResponse httpResponse = null;
+        try {
+            httpResponse = httpRequest.execute();
+        } catch (Exception e) {
+            throw new YuanapiSdkException(e.getMessage());
+        }finally {
+            // 确保释放资源
+            if (httpResponse != null) {
+                httpResponse.close();
+            }
+        }
 
         return new ApiResponse(
+                httpResponse.getStatus(),
                 httpResponse.body(),
                 filterHeaders(httpRequest.headers(), SAFE_REQUEST_HEADERS),
                 filterHeaders(httpResponse.headers(), SAFE_HEADERS)

@@ -4,33 +4,39 @@ import java.util.Collections;
 import java.util.Map;
 
 public class ApiResponse {
+    private final int responseCode;
     private final String body;
-    private final Map<String, String> reqHeaders;
-    private final Map<String, String> resHeaders;
+    private final Map<String, String> requestHeaders;
+    private final Map<String, String> responseHeaders;
 
-    public ApiResponse(String body, Map<String, String> reqHeaders, Map<String, String> resHeaders) {
+    public ApiResponse(int responseCode, String body, Map<String, String> requestHeaders, Map<String, String> responseHeaders) {
+        this.responseCode = responseCode;
         this.body = body;
-        this.reqHeaders = Collections.unmodifiableMap(reqHeaders);
-        this.resHeaders = Collections.unmodifiableMap(resHeaders);
+        this.requestHeaders = Collections.unmodifiableMap(requestHeaders);
+        this.responseHeaders = Collections.unmodifiableMap(responseHeaders);
+    }
+
+    public int getResponseCode() {
+        return responseCode;
     }
 
     public String getBody() {
         return body;
     }
 
-    public Map<String, String> getReqHeaders() {
-        return reqHeaders;
+    public Map<String, String> getRequestHeaders() {
+        return requestHeaders;
     }
 
-    public Map<String, String> getResHeaders() {
-        return resHeaders;
+    public Map<String, String> getResponseHeaders() {
+        return responseHeaders;
     }
 
-    public String getReqHeader(String name) {
-        return reqHeaders.get(name);
+    public String getRequestHeader(String header){
+        return requestHeaders.getOrDefault(header, null);
     }
 
-    public String getResHeader(String name) {
-        return resHeaders.get(name);
+    public String getResponseHeader(String header){
+        return responseHeaders.getOrDefault(header, null);
     }
 }

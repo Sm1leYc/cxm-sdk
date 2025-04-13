@@ -45,8 +45,7 @@ public class HttpUtils {
      * @param secretKey
      * @return
      */
-    public static Map<String, String> getHeader(String param, String accessKey, String secretKey){
-        String traceId = UUID.randomUUID().toString();
+    public static Map<String, String> getHeader(String traceId, String param, String accessKey, String secretKey){
 
         HashMap<String, String> headMap = new HashMap<>();
         headMap.put("X-AccessKey",accessKey);
