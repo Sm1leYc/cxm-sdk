@@ -1,9 +1,8 @@
 package com.cxmapi.common.retry.impl;
 
+import com.cxmapi.common.model.ApiResponse;
 import com.cxmapi.common.retry.RetryStrategy;
 import com.github.rholder.retry.*;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,32 +26,24 @@ public class DefaultRetryStrategy implements RetryStrategy {
         return RetryerBuilder.<T>newBuilder()
             .retryIfExceptionOfType(Exception.class)
             .retryIfResult(response -> {
-                if (response instanceof String) {
-                    return shouldRetry((String) response);
+                if (response instanceof ApiResponse) {
+                    return shouldRetry((ApiResponse) response);
                 }
                 return false;
             })
             .withWaitStrategy(WaitStrategies.fixedWait(initialWaitTime, TimeUnit.SECONDS))
             .withStopStrategy(StopStrategies.stopAfterAttempt(maxRetryTimes))
-            .withRetryListener(new RetryListener() {
-                @Override
-                public <V> void onRetry(Attempt<V> attempt) {
-                    // 可以加入日志记录
-                }
-            })
             .build();
     }
     
     @Override
-    public boolean shouldRetry(String response) {
-        if (response == null || response.isEmpty()) {
+    public boolean shouldRetry(ApiResponse response) {
+        if (response == null) {
             return true;
         }
         
         try {
-            JSONObject jsonResponse = JSONUtil.parseObj(response);
-            int code = jsonResponse.getInt("code", 200);
-            
+            int code = response.getResponseCode();
             // 判断网关错误码
             return (code >= 400);
         } catch (Exception e) {

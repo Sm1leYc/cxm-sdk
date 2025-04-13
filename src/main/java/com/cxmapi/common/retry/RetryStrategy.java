@@ -1,5 +1,6 @@
 package com.cxmapi.common.retry;
 
+import com.cxmapi.common.model.ApiResponse;
 import com.github.rholder.retry.Retryer;
 
 public interface RetryStrategy {
@@ -12,7 +13,7 @@ public interface RetryStrategy {
     /**
      * 判断响应是否需要重试
      */
-    boolean shouldRetry(String response);
+    boolean shouldRetry(ApiResponse response);
 
     /**
      * 获取策略名称
